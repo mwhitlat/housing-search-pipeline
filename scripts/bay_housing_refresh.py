@@ -10,7 +10,6 @@ from urllib.error import HTTPError
 from typing import Dict, List
 
 NOTION_API_VERSION = "2022-06-28"
-DEFAULT_NOTION_DATABASE_ID = "30dd08d008dd80b1a614d874a5db8468"
 OUT_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "bay_housing_latest.json")
 
 MOVE_WINDOW = "Aug-Sep 2026"
@@ -439,7 +438,7 @@ def sync_to_notion(items: List[Dict], db_id: str) -> str:
     return f"Notion upserts (deduped): {upserts}; skipped quality gate: {skipped_quality}"
 
 
-def run(max_items: int, no_notion: bool, db_id: str):
+def run(max_items: int, no_notion: bool, db_id: str | None):
     fetched_at = dt.datetime.now(dt.timezone.utc).isoformat()
     raw_items: List[Dict] = []
     diagnostics = []
@@ -487,10 +486,13 @@ def run(max_items: int, no_notion: bool, db_id: str):
 
     notion_msg = "Notion sync skipped (--no-notion)"
     if not no_notion:
-        try:
-            notion_msg = sync_to_notion(merged, db_id)
-        except Exception as e:
-            notion_msg = f"Notion sync failed: {e}"
+        if not db_id:
+            notion_msg = "Notion sync skipped: set NOTION_DATABASE_ID or pass --notion-db-id"
+        else:
+            try:
+                notion_msg = sync_to_notion(merged, db_id)
+            except Exception as e:
+                notion_msg = f"Notion sync failed: {e}"
 
     print(f"Raw extracted: {len(raw_items)}")
     print(f"Deduped cross-source: {len(merged)}")
@@ -502,6 +504,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-items", type=int, default=150)
     parser.add_argument("--no-notion", action="store_true")
-    parser.add_argument("--notion-db-id", default=os.getenv("NOTION_DATABASE_ID", DEFAULT_NOTION_DATABASE_ID))
+    parser.add_argument("--notion-db-id", default=os.getenv("NOTION_DATABASE_ID"))
     args = parser.parse_args()
     run(max_items=args.max_items, no_notion=args.no_notion, db_id=args.notion_db_id)

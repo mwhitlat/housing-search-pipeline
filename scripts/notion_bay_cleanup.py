@@ -4,7 +4,7 @@ import os
 import urllib.request
 from urllib.error import HTTPError
 
-DB_ID = "30dd08d008dd80b1a614d874a5db8468"
+DB_ID = os.getenv("NOTION_DATABASE_ID", "").strip()
 API_VERSION = "2022-06-28"
 
 
@@ -61,6 +61,8 @@ def main():
     token = os.getenv("NOTION_API_TOKEN", "").strip()
     if not token:
         raise SystemExit("Missing NOTION_API_TOKEN")
+    if not DB_ID:
+        raise SystemExit("Missing NOTION_DATABASE_ID")
 
     # migrate page values into consolidated fields
     updated = 0
