@@ -1,0 +1,41 @@
+{
+  "fetched_at_utc": "2026-02-20T12:33:39.577122+00:00",
+  "requirements": {
+    "move_window": "Aug-Sep 2026",
+    "max_rent": 8000,
+    "stretch_max": 9000,
+    "min_beds": 2,
+    "min_baths": 2,
+    "property_type": "house or townhouse only",
+    "dog_friendly": "required",
+    "parking": "required",
+    "commute": "placeholder score for <=30 min to Mountain View and Sunnyvale"
+  },
+  "diagnostics": [
+    {
+      "source": "redfin",
+      "url": "https://www.redfin.com/city/14972/CA/Los-Gatos/apartments-for-rent",
+      "found": 0
+    },
+    {
+      "source": "redfin",
+      "url": "https://www.redfin.com/city/17420/CA/Saratoga/apartments-for-rent",
+      "found": 0
+    },
+    {
+      "source": "realtor",
+      "url": "https://www.realtor.com/apartments/Los-Gatos_CA",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "source": "realtor",
+      "url": "https://www.realtor.com/apartments/Saratoga_CA",
+      "error": "HTTP Error 429: Too Many Requests"
+    }
+  ],
+  "count_raw": 0,
+  "count_deduped_cross_source": 0,
+  "count_quality_pass": 0,
+  "count_quality_fail": 0,
+  "listings": []
+}
